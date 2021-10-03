@@ -4,10 +4,10 @@ from wtforms.validators import DataRequired, Email
 
 class FitbitUserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    api_key = StringField('Apikey', validators=[DataRequired()])
-    api_secret_key = StringField('Apisecretkey', validators=[DataRequired()])
-    client_id = StringField('Clientid', validators=[DataRequired()])
-    client_secret_key = StringField('Cleintsecretkey', validators=[DataRequired()])
+    client_id = StringField('Client id', validators=[DataRequired()])
+    client_secret_key = StringField('Cleint secret key', validators=[DataRequired()])
+    access_token = StringField('Access Token', validators=[DataRequired()])
+    refresh_token = StringField('Refresh Token', validators=[DataRequired()])
     submit = SubmitField('User')
 
 class LoginForm(FlaskForm):

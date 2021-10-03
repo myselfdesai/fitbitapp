@@ -43,10 +43,10 @@ def new_fitbituser():
     if form.validate_on_submit():
         fitbituser = FitbitUser(
           username=form.username.data,
-          api_key=form.api_key.data,
-          api_secret_key=form.api_secret_key.data,
           client_id = form.client_id.data,
-          client_secret_key = form.client_secret_key.data
+          client_secret_key = form.client_secret_key.data,
+          access_token=form.access_token.data,
+          refresh_token=form.refresh_token.data,
         )
         db.session.add(fitbituser)
         db.session.commit()
@@ -61,56 +61,40 @@ def update_fitbituser(fitbituser_id):
     form = FitbitUserForm()
     if form.validate_on_submit():
         fitbituser.username = form.username.data
-        fitbituser.api_key = form.api_key.data
-        fitbituser.api_secret_key = form.api_secret_key.data
         fitbituser.client_id = form.client_id.data
         fitbituser.client_secret_key = form.client_secret_key.data
+        fitbituser.access_token = form.access_token.data
+        fitbituser.refresh_token = form.refresh_token.data
+
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('home'))
     elif request.method == 'GET':
         form.username.data = fitbituser.username
-        form.api_key.data = fitbituser.api_key
-        form.api_secret_key.data = fitbituser.api_secret_key
         form.client_id.data = fitbituser.client_id
         form.client_secret_key.data = fitbituser.client_secret_key
+        form.access_token.data = fitbituser.access_token
+        form.refresh_token.data = fitbituser.refresh_token
     return render_template('create_fitbituser.html', title='Update Fitbit User',
                            form=form, legend='Update Fitbit User')
-
-
-# @app.route("/fitbituser/<int:fitbituser_id>/delete", methods=['POST'])
-# @login_required
-# def delete_fitbituser(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     if post.author != current_user:
-#         abort(403)
-#     db.session.delete(post)
-#     db.session.commit()
-#     flash('Your post has been deleted!', 'success')
-#     return redirect(url_for('home'))
 
 @app.route("/fitbituser_page/<int:fitbituser_id>")
 @login_required
 def FitbitUserPage(fitbituser_id):
     fitbituser = FitbitUser.query.get_or_404(fitbituser_id)
+    CLIENT_ID = fitbituser.client_id
+    CLIENT_SECRET = fitbituser.client_secret_key
+    ACCESS_TOKEN= fitbituser.access_token
+    REFRESH_TOKEN= fitbituser.refresh_token
+    auth2_client=fitbit.Fitbit(CLIENT_ID,CLIENT_SECRET,oauth2=True,access_token=ACCESS_TOKEN,refresh_token=REFRESH_TOKEN, expires_in=2592000)
 
-    print(fitbituser)
-    # CLIENT_ID =
-    # CLIENT_SECRET =
-    # # server=Oauth2.OAuth2Server(CLIENT_ID, CLIENT_SECRET)
-    # # server.browser_authorize()
-    # ACCESS_TOKEN=
-    # REFRESH_TOKEN=
-    # auth2_client=fitbit.Fitbit(CLIENT_ID,CLIENT_SECRET,oauth2=True,access_token=ACCESS_TOKEN,refresh_token=REFRESH_TOKEN, expires_in=2592000)
+    oneDate = pd.datetime(year = 2019, month = 5, day = 3)
+    oneDayData = auth2_client.intraday_time_series('activities/heart',base_date=oneDate,detail_level='15min')
+    print(type(oneDayData))
+    df = pd.DataFrame(oneDayData['activities-heart-intraday']['dataset'])
+    fitbituser = df.values.tolist()
 
-    # oneDate = pd.datetime(year = 2019, month = 5, day = 3)
-    # oneDayData = auth2_client.intraday_time_series('activities/heart',base_date=oneDate,detail_level='15min')
-    # print(type(oneDayData))
-    # df = pd.DataFrame(oneDayData['activities-heart-intraday']['dataset'])
-
-    # fitbituser = df.values.tolist()
-    # return render_template('fitbit.html', fitbituser_data=oneDayData)
-    return render_template('fitbit.html')
+    return render_template('fitbit.html', fitbituser_data=oneDayData)
 
 def init_fitbit():
     unauth_client = fitbit.Fitbit('<consumer_key>', '<consumer_secret>')

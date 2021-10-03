@@ -1,0 +1,3 @@
+class Config(object):
+  SECRET_KEY = 'placeyoursecret key'
+  SQLALCHEMY_DATABASE_URI  = 'ex. sqlite:///site.db'

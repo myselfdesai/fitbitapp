@@ -16,10 +16,10 @@ class User(db.Model, UserMixin):
 class FitbitUser(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   username = db.Column(db.String(50),nullable=False)
-  api_key = db.Column(db.String(100),nullable=False)
-  api_secret_key = db.Column(db.String(100),nullable=False)
   client_id = db.Column(db.Text,nullable=False)
   client_secret_key = db.Column(db.Text,nullable=False)
+  access_token = db.Column(db.String(100),nullable=False)
+  refresh_token = db.Column(db.String(100),nullable=False)
 
   def __repr__(self):
       return f"FitbitUser( '{self.username}')"
