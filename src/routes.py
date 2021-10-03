@@ -41,13 +41,53 @@ def logout():
 def new_fitbituser():
     form = FitbitUserForm()
     if form.validate_on_submit():
-        # hashed_api_key = bcrypt.generate_password_hash(form.api_key.data).decode('utf-8')
-        fitbituser = FitbitUser(username=form.username.data, api_key=form.api_key.data, api_secret_key=form.api_secret_key.data)
+        fitbituser = FitbitUser(
+          username=form.username.data,
+          api_key=form.api_key.data,
+          api_secret_key=form.api_secret_key.data,
+          client_id = form.client_id.data,
+          client_secret_key = form.client_secret_key.data
+        )
         db.session.add(fitbituser)
         db.session.commit()
         flash('Your fitbit user has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_fitbituser.html', title='New Fitbit User', form=form, legend='New Fitbit User')
+
+@app.route("/fitbituser/<int:fitbituser_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_fitbituser(fitbituser_id):
+    fitbituser = FitbitUser.query.get_or_404(fitbituser_id)
+    form = FitbitUserForm()
+    if form.validate_on_submit():
+        fitbituser.username = form.username.data
+        fitbituser.api_key = form.api_key.data
+        fitbituser.api_secret_key = form.api_secret_key.data
+        fitbituser.client_id = form.client_id.data
+        fitbituser.client_secret_key = form.client_secret_key.data
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('home'))
+    elif request.method == 'GET':
+        form.username.data = fitbituser.username
+        form.api_key.data = fitbituser.api_key
+        form.api_secret_key.data = fitbituser.api_secret_key
+        form.client_id.data = fitbituser.client_id
+        form.client_secret_key.data = fitbituser.client_secret_key
+    return render_template('create_fitbituser.html', title='Update Fitbit User',
+                           form=form, legend='Update Fitbit User')
+
+
+# @app.route("/fitbituser/<int:fitbituser_id>/delete", methods=['POST'])
+# @login_required
+# def delete_fitbituser(post_id):
+#     post = Post.query.get_or_404(post_id)
+#     if post.author != current_user:
+#         abort(403)
+#     db.session.delete(post)
+#     db.session.commit()
+#     flash('Your post has been deleted!', 'success')
+#     return redirect(url_for('home'))
 
 @app.route("/fitbituser_page/<int:fitbituser_id>")
 @login_required

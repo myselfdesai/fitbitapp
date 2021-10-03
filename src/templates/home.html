@@ -41,6 +41,7 @@ Demo App
         {% if current_user.is_authenticated %}
           {% for user in fitbit_users %}
             <h2><a href="{{ url_for('FitbitUserPage', fitbituser_id=user.id) }}">{{ user.username }}</a></h2>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_fitbituser', fitbituser_id=user.id) }}">Update</a>
           {% endfor %}
         {% else %}
           <h1> please login in order to see data </h1>

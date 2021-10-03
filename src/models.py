@@ -18,6 +18,8 @@ class FitbitUser(db.Model):
   username = db.Column(db.String(50),nullable=False)
   api_key = db.Column(db.String(100),nullable=False)
   api_secret_key = db.Column(db.String(100),nullable=False)
+  client_id = db.Column(db.Text,nullable=False)
+  client_secret_key = db.Column(db.Text,nullable=False)
 
   def __repr__(self):
       return f"FitbitUser( '{self.username}')"
