@@ -1,0 +1,45 @@
+
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Add Fitbituser
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.css" integrity="sha512-V0+DPzYyLzIiMiWCg3nNdY+NyIiK9bED/T1xNBj08CaIUyK3sXRpB26OUCIzujMevxY9TRJFHQIxTwgzb0jVLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 > test</h1>
+    <div class="ct-chart ct-perfect-fourth"></div>
+  </div> <!-- /container -->
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js" integrity="sha512-9rxMbTkN9JcgG5euudGbdIbhFZ7KGyAuVomdQDI9qXfPply9BJh0iqA7E/moLCatH2JD4xBGHwV6ezBkCpnjRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+
+
+    // console.log(typeof(fitbitdata))
+    // console.log(typeof(JSON.parse(fitbitdata)))
+    // for (var key in JSON.parse(fitbitdata)) {
+    //   console.log(fitbitdata[key])
+    // }
+    // var data= {
+    //   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    //   series: [
+    //     [12, 9, 7, 8, 5]
+    //   ]
+    // };
+
+    // var options = {
+    //   width : 800,
+    //   height : 600
+    // }
+
+    // var mychart = new Chartist.Line('.ct-chart', data, options);
+  </script>
+{% endblock %}
