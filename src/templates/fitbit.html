@@ -13,12 +13,31 @@ Add Fitbituser
 
 {% block content %}
   <div class="container">
-    <h1 > test2</h1>
-    <!-- {{fitbituser_data['activities-heart-intraday']['dataset']}} -->
-    {% for data in fitbituser_data['activities-heart'] %}
-      <h1>test1</h1>
-      {{data}}
-    {% endfor %}
+    <table id="data" class="table table-striped">
+      <thead>
+        <tr>
+          <th>caloriesOut</th>
+          <th>max</th>
+          <th>min</th>
+          <th>minutes</th>
+          <th>name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for parent_dict_item in fitbituser_data['activities-heart'] %}
+          {% for data in parent_dict_item['value']['heartRateZones'] %}
+            <tr>
+              <td>{{data['caloriesOut']}}</td>
+              <td>{{data['max']}}</td>
+              <td>{{data['min']}}</td>
+              <td>{{data['minutes']}}</td>
+              <td>{{data['name']}}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+
     <div class="ct-chart ct-perfect-fourth"></div>
   </div> <!-- /container -->
 
@@ -28,23 +47,24 @@ Add Fitbituser
 
     var fitbitdata = '{{fitbituser_data["activities-heart-intraday"]["dataset"]|tojson}}';
 
-    console.log(typeof(fitbitdata))
-    console.log(typeof(JSON.parse(fitbitdata)))
-    for (var key in JSON.parse(fitbitdata)) {
-      console.log(fitbitdata[key])
+    const res = JSON.parse(fitbitdata)
+
+    var time = []
+    var value = []
+    for (var key of Object.keys(res)) {
+      time.push(res[key]['time'])
+      value.push(res[key]['value'])
     }
     var data= {
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      series: [
-        [12, 9, 7, 8, 5]
-      ]
+      labels: time,
+      series: [value]
     };
 
     var options = {
-      width : 800,
-      height : 600
+      width : 500,
+      height : 500
     }
 
-    var mychart = new Chartist.Line('.ct-chart', data, options);
+    var mychart = new Chartist.Line('.ct-chart',data, options);
   </script>
 {% endblock %}

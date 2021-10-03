@@ -91,8 +91,10 @@ def FitbitUserPage(fitbituser_id):
     oneDate = pd.datetime(year = 2019, month = 5, day = 3)
     oneDayData = auth2_client.intraday_time_series('activities/heart',base_date=oneDate,detail_level='15min')
     print(type(oneDayData))
-    df = pd.DataFrame(oneDayData['activities-heart-intraday']['dataset'])
-    fitbituser = df.values.tolist()
+    # df = pd.DataFrame(oneDayData['activities-heart']['value'])
+    # activity_heart_rate = oneDayData['activities-heart']['value']
+    # print(type(activity_heart_rate))
+    # fitbituser = df.values.tolist()
 
     return render_template('fitbit.html', fitbituser_data=oneDayData)
 
